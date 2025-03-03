@@ -1,0 +1,20 @@
+body {
+    background-color: #f8f9fa;
+  }
+  
+  .card {
+    border-radius: 10px;
+  }
+  
+  h3 {
+    font-weight: 600;
+  }
+  
+  .btn {
+    border-radius: 5px;
+  }
+  
+  .container {
+    max-width: 600px;
+  }
+  
