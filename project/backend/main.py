@@ -217,12 +217,41 @@ class MatchResource(Resource):
         # Sort matches by similarity score
         matches.sort(key=lambda x: x['similarity_score'], reverse=True)
 
-        jobemp = JobEmployeeMatch(job_id=job_id, employee_id=matches[0]['employee_id'])
+        if matches:
+            existing = JobEmployeeMatch.query.filter_by(job_id=job_id, employee_id=matches[0]['employee_id']).first()
+            if existing:
+                return {"matches": matches}, 200
+            else:
+                jobemp = JobEmployeeMatch(job_id=job_id, employee_id=matches[0]['employee_id'])
 
-        db.session.add(jobemp)
-        db.session.commit()
+                db.session.add(jobemp)
+                db.session.commit()
 
-        return {"matches": matches}, 200
+                return {"matches": matches}, 200
+        else:
+            return {"matches": []}, 200
+
+class EmployeeMatchedJobsResource(Resource):
+    @jwt_required()
+    def get(self):
+        employee_id = get_jwt_identity()
+
+        matches = JobEmployeeMatch.query.filter_by(employee_id=employee_id).all()
+
+        matched_jobs = []
+        for match in matches:
+            job = Job.query.get(match.job_id)
+            if job:
+                matched_jobs.append({
+                    "job_id": job.id,
+                    "title": job.title,
+                    "description": job.description,
+                    "required_skills": job.required_skills,
+                    "location": job.location,
+                    "salary_range": job.salary_range
+                })
+
+        return {"matched_jobs": matched_jobs}, 200
 
 # class UploadResume(Resource):
 #     def post(self):
@@ -242,6 +271,7 @@ api.add_resource(JobResource, '/post-job')
 api.add_resource(SkillResource, '/upload-skills')
 api.add_resource(MatchResource, '/match-employees/<int:job_id>')
 # api.add_resource(UploadResume, '/upload-resume')
+api.add_resource(EmployeeMatchedJobsResource, '/employee/matched-jobs')
 
 # @app.after_request
 # def after_request(response):

@@ -9,6 +9,7 @@ import CompanyPage from '@/components/CompanyPage.vue';
 import EmployeePage from '@/components/EmployeePage.vue';
 import MyJobs from '@/components/MyJobs.vue';
 import MatchJobs from '@/components/MatchJobs.vue';
+import MyMatches from '@/components/MyMatches.vue';
 
 const routes = [
   { path: '/', component: HomePage},
@@ -21,7 +22,8 @@ const routes = [
     { path: 'match-jobs', component: MatchJobs},
   ]},
   { path: '/employee-page', component: EmployeePage, children:[
-    { path: 'skill-upload', component: SkillUpload }
+    { path: 'skill-upload', component: SkillUpload },
+    { path: 'my-matches', component: MyMatches }
   ]}
 ];
 

@@ -4,8 +4,10 @@
         <nav class="nav navbar">
             <router-link to='/employee-page' class="nav-link">Employee Home</router-link>
             <router-link to='/employee-page/skill-upload' class="nav-link">Upload your Skills</router-link>
+            <router-link to='/employee-page/my-matches' class="nav-link">My Job Matches</router-link>
         </nav>
     </div>
+    <button class="btn btn-success" @click="showSkills">Show my Skills</button>
     <span v-if="skills != ''">My skills: {{ skills }}</span>
     <router-view></router-view>
 </div>
@@ -19,7 +21,8 @@
                 skills: ""
             }
         },
-        mounted(){
+        methods:{
+            showSkills(){
             fetch('http://127.0.0.1:5000/upload-skills', {
                 headers: { 
                     "Authorization": "Bearer " + localStorage.token,
@@ -32,6 +35,7 @@
                 console.log(data);
                 this.skills = data.skills;
             })
+        }
         }
     }
 </script>
