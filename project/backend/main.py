@@ -208,7 +208,7 @@ class MatchResource(Resource):
             similarity_score = calculate_similarity(job_skills, employee_skills)
             if similarity_score > 0.2:  # Threshold for matching
                 matches.append({
-                    "employee_name": employee.
+                    "employee_name": employee.employee.email,
                     "employee_id": employee.employee_id,
                     "similarity_score": similarity_score,
                     "skills": employee.skills

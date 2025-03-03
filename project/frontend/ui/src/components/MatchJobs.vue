@@ -23,6 +23,7 @@
           <li v-for="match in matches" :key="match.employee_id" class="list-group-item">
             <div class="d-flex justify-content-between align-items-center">
               <div>
+                <h5 class="mb-1">Employee Email: {{ match.employee_name }}</h5>
                 <h5 class="mb-1">Employee ID: {{ match.employee_id }}</h5>
                 <small class="text-muted">Similarity Score: {{ match.similarity_score.toFixed(2) }}</small>
               </div>
