@@ -69,7 +69,9 @@ class LoginResource(Resource):
 
         user = User.query.filter_by(email=email, password=password).first()
         if user:
-            access_token = create_access_token(identity=str(user.id))
+            user_id = str(user.id)
+            print(type(user_id))
+            access_token = create_access_token(identity=user_id)
             print('logged in user flask login')
             print('login from backend')
             return {"message": "Login successful", "user_id": user.id, "type": user.type, "token": access_token}, 200
@@ -97,6 +99,8 @@ class JobResource(Resource):
 
         current_user_id = get_jwt_identity()
 
+        print(current_user_id)
+
         print(data)
 
         # Validate required fields
@@ -123,37 +127,37 @@ class JobResource(Resource):
             "salary_range": job.salary_range
         }, 201
 
-    # @jwt_required()
-    # def get(self, job_id=None):
-    #     """Get job details or list all jobs."""
-    #     if job_id:
-    #         # Get a specific job by ID
-    #         job = Job.query.get(job_id)
-    #         if not job:
-    #             return {"message": "Job not found"}, 404
+    @jwt_required()
+    def get(self, job_id=None):
+        """Get job details or list all jobs."""
+        if job_id:
+            # Get a specific job by ID
+            job = Job.query.get(job_id)
+            if not job:
+                return {"message": "Job not found"}, 404
 
-    #         return {
-    #             "id": job.id,
-    #             "title": job.title,
-    #             "description": job.description,
-    #             "required_skills": job.required_skills,
-    #             "location": job.location,
-    #             "salary_range": job.salary_range,
-    #             "company_id": job.company_id
-    #         }, 200
-    #     else:
-    #         # List all jobs
-    #         jobs = Job.query.all()
-    #         job_list = []
-    #         for job in jobs:
-    #             job_list.append({
-    #                 "id": job.id,
-    #                 "title": job.title,
-    #                 "location": job.location,
-    #                 "salary_range": job.salary_range,
-    #                 "company_id": job.company_id
-    #             })
-    #         return {"jobs": job_list}, 200
+            return {
+                "id": job.id,
+                "title": job.title,
+                "description": job.description,
+                "required_skills": job.required_skills,
+                "location": job.location,
+                "salary_range": job.salary_range,
+                "company_id": job.company_id
+            }, 200
+        else:
+            # List all jobs
+            jobs = Job.query.all()
+            job_list = []
+            for job in jobs:
+                job_list.append({
+                    "id": job.id,
+                    "title": job.title,
+                    "location": job.location,
+                    "salary_range": job.salary_range,
+                    "company_id": job.company_id
+                })
+            return {"jobs": job_list}, 200
 
 class SkillResource(Resource):
     @jwt_required()
@@ -177,7 +181,6 @@ class SkillResource(Resource):
 
     @jwt_required()
     def get(self):
-        # print(current_user)
         current_user_id = get_jwt_identity()
         try:
             user = EmployeeSkill.query.filter_by(employee_id=current_user_id).first()
@@ -237,10 +240,10 @@ api.add_resource(SkillResource, '/upload-skills')
 # api.add_resource(MatchResource, '/match-employees/<int:job_id>')
 # api.add_resource(UploadResume, '/upload-resume')
 
-@app.after_request
-def after_request(response):
-    print(response.headers)  # Debug: Check if 'Set-Cookie' is present
-    return response
+# @app.after_request
+# def after_request(response):
+#     print(response.headers)  # Debug: Check if 'Set-Cookie' is present
+#     return response
 
 # Run the Flask app
 if __name__ == '__main__':

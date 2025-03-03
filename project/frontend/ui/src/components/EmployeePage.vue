@@ -6,8 +6,7 @@
             <router-link to='/employee-page/skill-upload' class="nav-link">Upload your Skills</router-link>
         </nav>
     </div>
-    <button class="btn btn-success" @click="showSkills">Show my skills</button>
-    <span v-if="skills != ''">{{ skills }}</span>
+    <span v-if="skills != ''">My skills: {{ skills }}</span>
     <router-view></router-view>
 </div>
 </template>
@@ -20,21 +19,19 @@
                 skills: ""
             }
         },
-        methods: {
-            showSkills(){
-                fetch('http://127.0.0.1:5000/upload-skills', {
-                    headers: { 
-                "Authorization": "Bearer " + localStorage.token,
-                "Content-Type": "application/json",
-                "Access-Control-Allow-Origin": "*"
-            }
-                })
-                .then(resp => resp.json())
-                .then(data => {
-                    console.log(data);
-                    this.skills = data.skills;
-                })
-            }
+        mounted(){
+            fetch('http://127.0.0.1:5000/upload-skills', {
+                headers: { 
+                    "Authorization": "Bearer " + localStorage.token,
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*"
+                }
+            })
+            .then(resp => resp.json())
+            .then(data => {
+                console.log(data);
+                this.skills = data.skills;
+            })
         }
     }
 </script>

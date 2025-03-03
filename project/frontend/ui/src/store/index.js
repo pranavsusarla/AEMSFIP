@@ -11,10 +11,12 @@ export default createStore({
     loginUser: function(state, token){
       state.login = true;
       state.token = token;
+      localStorage.token = token;
     },
     logoutUser: function(state){
       state.login = false;
       state.token = "";
+      localStorage.clear();
     }
   },
   actions: {

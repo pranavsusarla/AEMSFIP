@@ -86,6 +86,9 @@
         })
       },
     },
+    mounted(){
+      console.log(String("Bearer " + localStorage.token));
+    }
   };
   </script>
   
