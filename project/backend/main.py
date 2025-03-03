@@ -43,6 +43,17 @@ class EmployeeSkill(db.Model):
     skills = db.Column(db.Text, nullable=False)
     employee_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
+    employee = db.relationship('User', backref=db.backref('employee_skill', lazy=True))
+
+class JobEmployeeMatch(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    job_id = db.Column(db.Integer, db.ForeignKey('job.id'), nullable=False)  # Foreign key to Job
+    employee_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # Foreign key to User (employee)
+
+    # Relationships
+    job = db.relationship('Job', backref=db.backref('matches', lazy=True))
+    employee = db.relationship('User', backref=db.backref('job_matches', lazy=True))
+
 # Helper Functions
 def preprocess_text(text):
     """Preprocess text by tokenizing, lemmatizing, and removing stopwords."""
@@ -128,36 +139,22 @@ class JobResource(Resource):
         }, 201
 
     @jwt_required()
-    def get(self, job_id=None):
-        """Get job details or list all jobs."""
-        if job_id:
-            # Get a specific job by ID
-            job = Job.query.get(job_id)
-            if not job:
-                return {"message": "Job not found"}, 404
-
-            return {
+    def get(self):
+        """List all jobs."""
+        # List all jobs
+        current_user_id = get_jwt_identity()
+        jobs = Job.query.filter_by(company_id=current_user_id).all()
+        job_list = []
+        for job in jobs:
+            job_list.append({
                 "id": job.id,
                 "title": job.title,
-                "description": job.description,
-                "required_skills": job.required_skills,
                 "location": job.location,
+                "required_skills": job.required_skills,
                 "salary_range": job.salary_range,
                 "company_id": job.company_id
-            }, 200
-        else:
-            # List all jobs
-            jobs = Job.query.all()
-            job_list = []
-            for job in jobs:
-                job_list.append({
-                    "id": job.id,
-                    "title": job.title,
-                    "location": job.location,
-                    "salary_range": job.salary_range,
-                    "company_id": job.company_id
-                })
-            return {"jobs": job_list}, 200
+            })
+        return {"jobs": job_list}, 200
 
 class SkillResource(Resource):
     @jwt_required()
@@ -194,32 +191,38 @@ class SkillResource(Resource):
             print(e)
             return jsonify({'skills': 'An error occured while fetching skills'})
 
-# class MatchResource(Resource):
-#     @login_required
-#     def get(self, job_id):
-#         """Job matching endpoint."""
-#         job = Job.query.get(job_id)
-#         if not job:
-#             return {"message": "Job not found"}, 404
+class MatchResource(Resource):
+    @jwt_required()
+    def get(self, job_id):
+        """Job matching endpoint."""
+        job = Job.query.get(job_id)
+        if not job:
+            return {"message": "Job not found"}, 404
 
-#         job_skills = preprocess_text(job.required_skills)
-#         employees = EmployeeSkill.query.all()
+        job_skills = preprocess_text(job.required_skills)
+        employees = EmployeeSkill.query.all()
 
-#         matches = []
-#         for employee in employees:
-#             employee_skills = preprocess_text(employee.skills)
-#             similarity_score = calculate_similarity(job_skills, employee_skills)
-#             if similarity_score > 0.2:  # Threshold for matching
-#                 matches.append({
-#                     "employee_id": employee.employee_id,
-#                     "similarity_score": similarity_score,
-#                     "skills": employee.skills
-#                 })
+        matches = []
+        for employee in employees:
+            employee_skills = preprocess_text(employee.skills)
+            similarity_score = calculate_similarity(job_skills, employee_skills)
+            if similarity_score > 0.2:  # Threshold for matching
+                matches.append({
+                    "employee_name": employee.
+                    "employee_id": employee.employee_id,
+                    "similarity_score": similarity_score,
+                    "skills": employee.skills
+                })
 
-#         # Sort matches by similarity score
-#         matches.sort(key=lambda x: x['similarity_score'], reverse=True)
+        # Sort matches by similarity score
+        matches.sort(key=lambda x: x['similarity_score'], reverse=True)
 
-#         return {"matches": matches}, 200
+        jobemp = JobEmployeeMatch(job_id=job_id, employee_id=matches[0]['employee_id'])
+
+        db.session.add(jobemp)
+        db.session.commit()
+
+        return {"matches": matches}, 200
 
 # class UploadResume(Resource):
 #     def post(self):
@@ -237,7 +240,7 @@ api.add_resource(LoginResource, '/login')
 # api.add_resource(LogoutResource, '/logout')
 api.add_resource(JobResource, '/post-job')
 api.add_resource(SkillResource, '/upload-skills')
-# api.add_resource(MatchResource, '/match-employees/<int:job_id>')
+api.add_resource(MatchResource, '/match-employees/<int:job_id>')
 # api.add_resource(UploadResume, '/upload-resume')
 
 # @app.after_request
