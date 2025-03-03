@@ -8,6 +8,8 @@
                         <div>
                             <h5 class="mb-1">{{ job.title }}</h5>
                             <small class="text-muted">Location: {{ job.location }}</small>
+                            <br>
+                            <small class="text-muted">Job Description: {{ job.description }}</small>
                         </div>
                         <div>
                             <span class="badge bg-primary me-2">Salary: {{ job.salary_range }}</span>

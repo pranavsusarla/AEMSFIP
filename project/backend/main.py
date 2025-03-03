@@ -150,6 +150,7 @@ class JobResource(Resource):
                 "id": job.id,
                 "title": job.title,
                 "location": job.location,
+                "description": job.description,
                 "required_skills": job.required_skills,
                 "salary_range": job.salary_range,
                 "company_id": job.company_id

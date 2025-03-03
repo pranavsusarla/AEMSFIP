@@ -12,7 +12,6 @@
               </div>
               <div>
                 <span class="badge bg-primary me-2">Salary: {{ job.salary_range }}</span>
-                <span class="badge bg-success">Status: {{ job.status }}</span>
               </div>
             </div>
             <div class="mt-2">

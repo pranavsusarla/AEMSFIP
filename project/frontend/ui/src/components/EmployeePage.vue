@@ -8,7 +8,7 @@
         </nav>
     </div>
     <button class="btn btn-success" @click="showSkills">Show my Skills</button>
-    <span v-if="skills != ''">My skills: {{ skills }}</span>
+    <span v-if="skills != ''"><h5 class="m-3">My skills: {{ skills }}</h5></span>
     <router-view></router-view>
 </div>
 </template>
