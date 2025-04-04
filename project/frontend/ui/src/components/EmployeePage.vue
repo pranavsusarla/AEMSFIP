@@ -7,8 +7,13 @@
             <router-link to='/employee-page/my-matches' class="nav-link">My Job Matches</router-link>
         </nav>
     </div>
-    <button class="btn btn-success" @click="showSkills">Show my Skills</button>
-    <span v-if="skills != ''"><h5 class="m-3">My skills: {{ skills }}</h5></span>
+    <div class="container">
+        <h5>Welcome!</h5>
+        <div>
+            <button class="btn btn-success" @click="showSkills">Show my Skills</button>
+            <span v-if="skills != ''"><h5 class="m-3">My skills: {{ skills }}</h5></span>
+        </div>
+    </div>
     <router-view></router-view>
 </div>
 </template>
