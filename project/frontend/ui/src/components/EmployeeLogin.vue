@@ -1,20 +1,49 @@
 <template>
-    <div class="container d-flex justify-content-center align-items-center">
-      <div class="card p-4 shadow" style="width: 400px;">
-        <h3 class="text-center mb-3">Employee Login</h3>
-        <form @submit.prevent="login">
-          <div class="mb-3">
-            <label class="form-label">Email</label>
-            <input v-model="email" type="email" class="form-control" required />
-          </div>
-          <div class="mb-3">
-            <label class="form-label">Password</label>
-            <input v-model="password" type="password" class="form-control" required />
-          </div>
-          <button type="submit" class="btn btn-primary w-100">Login</button>
-        </form>
+<div>
+    <div class="container d-flex justify-content-center bg-light">
+  <div class="card p-4 shadow-lg rounded-4" style="width: 400px;">
+    <h3 class="text-center text-primary mb-4 fw-bold">
+      <i class="bi bi-person-badge-fill me-2"></i>Employee Login
+    </h3>
+
+    <form @submit.prevent="login">
+      <div class="mb-3">
+        <label for="email" class="form-label fw-semibold">Email address</label>
+        <input
+          v-model="email"
+          type="email"
+          id="email"
+          class="form-control form-control-lg"
+          placeholder="Enter your email"
+          required
+        />
       </div>
-    </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label fw-semibold">Password</label>
+        <input
+          v-model="password"
+          type="password"
+          id="password"
+          class="form-control form-control-lg"
+          placeholder="Enter your password"
+          required
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary w-100 fw-semibold py-2">
+        Login
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Include Bootstrap Icons CDN if not already done -->
+<link
+  href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
+  rel="stylesheet"
+/>
+</div>
   </template>
   
   <script>
@@ -39,9 +68,14 @@
         .then(resp => resp.json())
         .then(data => {
           console.log(data);
-          this.$store.commit('loginUser', data.token);
+          if(data.message == "Login successful"){
+            this.$store.commit('loginUser', data.token);
+            this.$router.push("/employee-page/employee-home");
+          }else{
+            this.$router.push("/employee-login")
+          }
         })
-        this.$router.push("/employee-page/employee-home");
+
       },
     },
   };

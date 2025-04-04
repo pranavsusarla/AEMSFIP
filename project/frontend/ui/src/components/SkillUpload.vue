@@ -7,10 +7,7 @@
             <label class="form-label">Skills</label>
             <input v-model="skills" type="text" class="form-control" placeholder="Enter skills (comma separated)" required />
           </div>
-          <!-- <div class="mb-3">
-            <label class="form-label">Resume Upload</label>
-            <input type="file" class="form-control" @change="handleFileUpload" />
-          </div> -->
+          <br>
           <button type="submit" class="btn btn-success w-100">Submit</button>
         </form>
       </div>
@@ -23,11 +20,6 @@
       return { skills: "", resume: null };
     },
     methods: {
-      // handleFileUpload(event) {
-      //   if (! event.target.files[0]){
-      //     this.resume = event.target.files[0];
-      // }
-      // },
       uploadSkills() {
         console.log("Skills uploaded:", this.skills);
         fetch('http://127.0.0.1:5000/upload-skills', {

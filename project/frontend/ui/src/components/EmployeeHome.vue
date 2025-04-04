@@ -1,10 +1,20 @@
 <template>
-    <div class="container">
-        <h5>Welcome!</h5>
-        <div>
-            <span v-if="skills != ''"><h5 class="">My skills: {{ skills }}</h5></span>
+    <div class="container my-5 p-4 shadow rounded bg-light">
+        <div class="text-center mb-4">
+            <h2 class="text-primary fw-bold">Welcome!</h2>
+        </div>
+
+        <div v-if="skills && skills.length" class="alert alert-success text-center">
+            <h5 class="mb-0">
+                My Skills: {{ skills }}
+            </h5>
+        </div>
+
+        <div v-else class="text-center text-muted">
+            <p>No skills uploaded yet.</p>
         </div>
     </div>
+
 </template>
 
 <script>
