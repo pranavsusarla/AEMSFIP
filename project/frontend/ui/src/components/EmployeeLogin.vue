@@ -41,7 +41,7 @@
           console.log(data);
           this.$store.commit('loginUser', data.token);
         })
-        this.$router.push("/employee-page");
+        this.$router.push("/employee-page/employee-home");
       },
     },
   };

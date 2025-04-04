@@ -18,7 +18,7 @@
   
       <!-- Display matching employees -->
       <div v-if="matches.length > 0">
-        <h3 class="mb-3">Matching Employees</h3>
+        <h3 class="mb-3">Best Matching Employee</h3>
         <ul class="list-group">
           <li v-for="match in matches" :key="match.employee_id" class="list-group-item">
             <div class="d-flex justify-content-between align-items-center">

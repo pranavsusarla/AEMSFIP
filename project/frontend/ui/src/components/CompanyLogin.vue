@@ -42,7 +42,7 @@ export default {
         console.log(data.message);
         if(data.message == "Login successful"){
           this.$store.commit('loginUser', data.token);
-          this.$router.push("/company-page");
+          this.$router.push("/company-page/company-home");
         }else{
           this.message = data.message;
         }

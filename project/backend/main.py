@@ -8,6 +8,8 @@ import spacy
 
 from flask_cors import CORS, cross_origin
 
+from mail_service import sendmailtocompany, sendmailtoemployee
+
 # Initialize Flask app
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
@@ -37,6 +39,15 @@ class Job(db.Model):
     location = db.Column(db.String(120), nullable=False)  # Job location
     salary_range = db.Column(db.String(120), nullable=False)
     company_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def to_dict(self):
+        return{
+            'id': self.id,
+            'title': self.title,
+            'description': self.description,
+            'skills': self.required_skills,
+            'location': self.location,
+        }
 
 class EmployeeSkill(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -196,7 +207,7 @@ class MatchResource(Resource):
     @jwt_required()
     def get(self, job_id):
         """Job matching endpoint."""
-        job = Job.query.get(job_id)
+        job = Job.query.filter_by(id=job_id).first()
         if not job:
             return {"message": "Job not found"}, 404
 
@@ -227,6 +238,19 @@ class MatchResource(Resource):
 
                 db.session.add(jobemp)
                 db.session.commit()
+
+                # sending mail to company
+                to = User.query.filter_by(id=matches[0]['employee_id']).first().email
+                job_for_mail = Job.query.filter_by(id=job_id).first().to_dict()
+
+                print(job_for_mail)
+                
+                sendmailtocompany("vnrvjiet@gmail.com", job_for_mail)
+                print('sent mail to company')
+
+                # sending mail to employee
+                sendmailtoemployee(to, job_for_mail)
+                print('sent mail to employee')
 
                 return {"matches": matches}, 200
         else:
