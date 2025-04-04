@@ -5,7 +5,7 @@
   <div class="container">
     <template v-if="!$store.state.login">
     <router-link to="/" class="navbar-brand fw-bold fs-4 text-white">
-      <i class="bi bi-briefcase-fill me-2"></i>Job Matcher
+      <i class="bi bi-briefcase-fill me-2"></i>AEMSFIP
     </router-link>
 
     <button
@@ -37,7 +37,7 @@
     </template>
     <template v-else>
       <router-link to="#" class="navbar-brand fw-bold fs-4 text-white">
-      <i class="bi bi-briefcase-fill me-2"></i>Job Matcher
+      <i class="bi bi-briefcase-fill me-2"></i>AEMSFIP
     </router-link>
 
     <button

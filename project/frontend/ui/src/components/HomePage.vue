@@ -1,8 +1,11 @@
 <template>
 <div>
   <div class="header text-center">
-    <h4 class="mt-2">Expert Matching and Relevancy Scoring System</h4>
-    <h5 class="fw-bold">Major Project Team - 01</h5>
+    <h4 class="mt-2 text-center">Automatic Expert Matching System For Interview Processes</h4>
+    <br>
+    <h5 class="fw-bold mb-0">Major Project Team - 01</h5>
+    <br>
+    <h5 class="fw-bold mb-0">SIH - 1654</h5>
   </div>
 
   <div class="container section">
