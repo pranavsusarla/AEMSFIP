@@ -8,10 +8,10 @@ SENDER_EMAIL = 'no-reply@aemsfip.com'
 SENDER_PASSWORD = ''
 
 
-def sendmailtocompany(to, job):
+def sendmailtocompany(comp, job, to):
     msg = MIMEMultipart()
 
-    msg["To"] = to
+    msg["To"] = comp
     msg["Subject"] = "Match found for this Job Description | AEMFSIP"
     msg["From"] = SENDER_EMAIL
 

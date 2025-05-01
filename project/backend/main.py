@@ -245,7 +245,7 @@ class MatchResource(Resource):
 
                 print(job_for_mail)
                 
-                sendmailtocompany("vnrvjiet@gmail.com", job_for_mail)
+                sendmailtocompany("vnrvjiet@gmail.com", job_for_mail, to)
                 print('sent mail to company')
 
                 # sending mail to employee

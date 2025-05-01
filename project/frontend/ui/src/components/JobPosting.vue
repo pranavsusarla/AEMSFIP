@@ -82,7 +82,7 @@
             console.log(data);
             this.message = data.message;
             alert('Job Successfully posted!');
-            this.$router.push('/company-page');
+            this.$router.push('/company-page/company-home');
         })
       },
     },
